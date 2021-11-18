@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>flipTABLE</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body class="container bg-light p-2">
+
+    <!-- style="background-color: #e3f2fd;" -->
+    <nav class="navbar bg-dark navbar-dark ">
+
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'imgs/board.png' %}" alt="game logo" style="width:55px;">
+            <b>flipTABLE</b>
+        </a>
+        <!-- <ul class="navbar-nav navbar-expand-lg">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link 1</a>
+                    </li> -->
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+            <div class="dropdown-menu">
+                <!-- <div class="dropdown-header">Dropdown header 1</div> -->
+                <a class="dropdown-item" href="/profile/{{user.id}}">View/Update Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Plan an Event</a>
+                <a class="dropdown-item" href="#">GameShelf</a>
+                <a class="dropdown-item" href="#">Add a Game to Shelf</a>
+                <a class="dropdown-item" href="#">Find a Group</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="jumbotron text-center shadow-lg">
+        <div>
+            <img class="img-fluid" id="dash-img" src="{% static 'imgs/board-game-couple2.png' %}" alt="group board game"
+                style="width: 25rem; padding-bottom: 5px;">
+        </div>
+        <h1 class="display-3">Welcome to <span class="text-muted font-weight-bold">flip</span><span
+                class="text-info">TABLE</span></h1>
+        <h1 class="display-4">{{user.name}}!</h1>
+
+        <div class="main-page-btns row justify-content-around">
+            <div class="btn-group col-sm-3">
+                <a href="/profile/{{user.id}}" type="button" class="font-weight-bold btn btn-lg btn-info">View/Update
+                    Profile</a>
+            </div>
+            <div class="btn-group col-sm-3">
+                <a href="/plan_event" type="button" class="font-weight-bold btn btn-lg btn-secondary">Plan an Event</a>
+            </div>
+            <div class="btn-group col-sm-3">
+                <a href="#" type="button" class="font-weight-bold btn btn-lg btn-info">GameShelf</a>
+            </div>
+            <div class="btn-group col-sm-3">
+                <a href="#" type="button" class="font-weight-bold btn btn-lg btn-secondary">Join a Group</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="main row justify-content-evenly">
+        <!-- Upcoming Events -->
+        <!-- **ADD SCROLL BOX AND HEIGHT LIMIT** -->
+        <div class="col-sm-6">
+            <div style="margin: 0em 1em 1em;">
+                <h4>UPCOMING EVENTS</h4>
+                <small class="text-muted">Click on event for more info</small>
+                <hr>
+            </div>
+            <ul class="list-unstyled scroll-bar" style="height: 600px;">
+                {% for event in all_events %}
+                <li class="media">
+                    <img class="ml-3 mt-3 rounded-circle img-fluid event-img-placeholder"
+                        src="{% static 'imgs/swords.png' %}" alt="Sword placeholder image">
+                    <div class="media-body ml-3 dash-event-link">
+                        <a href="/event/{{event.id}}" class=" text-dark">
+                            <h5 class="mt-0 mb-3">{{event.title}}</h5>
+                            <p class="mt-1 mb-1">{{event.event_date}} | {{event.time}}</p>
+                            <p class="mt-0 mb-2">{{event.address}}, {{event.city}}</p>
+                        </a>
+                        <div>
+                            <span class="badge badge-pill badge-info mt-4">Attending: {{event.attending.count}}</span>
+                            {% if event.user_creater.id == user.id %}
+                            <a class="text-dark ml-6 float-right" href="event/{{event.id}}">Edit Event</a>
+                            {%else%}
+                            <a href="#"><small class="text-dark float-right">Created by <span class="text-info">{{event.user_creater.name}}</span></small></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+                <hr>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        
+
+
+        <!-- messageboard -->
+        <!-- **ADD SCROLL BOX AND HEIGHT LIMIT** -->
+        <div class="message-board col-sm-6">
+            <div class="list-group">
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h4 class="mb-1">MESSAGE BOARD</h4>
+                        <div>
+                            <a href="#" class="text-info font-weight-bold">Post a Message</a>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793V2zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                {% comment %}
+                <ul class="list-unstyled scroll-bar" style="height: 600px;">
+                    {% for message in post_messages %}
+                    <li>
+                        <div class="list-group-item list-group-item-action ">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5><a href="#">{{message.user.name}}</a> posted
+                                    {% if message.user.id == this_user.id %}
+                                    <a href="#" class="text-muted float-right"><small class="ml-2" >(Delete)</small></a>
+                                    {% endif %}
+                                </h5>
+                                <small class="text-muted">{{message.updated_at|date}}</small>
+                            </div>
+                            <div>
+                                <p>{{message.content}}</p>
+                            </div>
+                            <hr>
+                            {% for comment in message.comments.all reversed %}
+                            <div class="comment ml-4">
+                                <h5>{{comment.user.name}} - {{comment.updated_at|date}}</h5>
+                                <p>{{comment.content}}</p>
+                                <hr>
+                            </div>
+                        </div>
+                    </li>
+                    <hr>
+                    {% endfor %}
+                </ul>
+                {% endcomment %}
+
+                <ul class="list-unstyled scroll-bar" style="height: 600px;">
+                    <li>
+                        <div class="list-group-item list-group-item-action ">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5><a href="#" class="text-info">**user name**</a> posted <a href="#" class="text-muted float-right"><small class="ml-2" >(Delete)</small></a></h5>
+                                <small class="text-muted">*Date*</small>
+                            </div>
+                            <div>
+                                <p>Some placeholder content in a paragraph.</p>
+                            </div>
+                            <hr>
+                            <div class="comment mr-2 ml-2">
+                                <h6 class=""><a href="#" class="text-info">**user name**</a> - **date**</h6>
+                                <p class="">placeholder content in a paragraph.</p>
+                                <hr>
+                            </div>
+                        </div>
+                    </li>
+                    <hr>
+                    <li>
+                        <div class="list-group-item list-group-item-action ">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5><a href="#" class="text-info">**user name**</a> posted <a href="#" class="text-muted float-right"><small class="ml-2" >(Delete)</small></a></h5>
+                                <small class="text-muted">*Date*</small>
+                            </div>
+                            <div>
+                                <p>Some placeholder content in a paragraph.</p>
+                            </div>
+                            <hr>
+                            <div class="comment mr-2 ml-2">
+                                <h6 class=""><a href="#" class="text-info">**user name**</a> - **date**</h6>
+                                <p class="">placeholder content in a paragraph.</p>
+                                <hr>
+                            </div>
+                        </div>
+                    </li>
+                    <hr>
+                    <li>
+                        <div class="list-group-item list-group-item-action ">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5><a href="#" class="text-info">**user name**</a> posted <a href="#" class="text-muted float-right"><small class="ml-2" >(Delete)</small></a></h5>
+                                <small class="text-muted">*Date*</small>
+                            </div>
+                            <div>
+                                <p>Some placeholder content in a paragraph.</p>
+                            </div>
+                            <hr>
+                            <div class="comment mr-2 ml-2">
+                                <h6 class=""><a href="#" class="text-info">**user name**</a> - **date**</h6>
+                                <p class="">placeholder content in a paragraph.</p>
+                                <hr>
+                            </div>
+                        </div>
+                    </li>
+                    <hr>
+                    <li>
+                        <div class="list-group-item list-group-item-action ">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5><a href="#" class="text-info">**user name**</a> posted <a href="#" class="text-muted float-right"><small class="ml-2" >(Delete)</small></a></h5>
+                                <small class="text-muted">*Date*</small>
+                            </div>
+                            <div>
+                                <p>Some placeholder content in a paragraph.</p>
+                            </div>
+                            <hr>
+                            <div class="comment mr-2 ml-2">
+                                <h6 class=""><a href="#" class="text-info">**user name**</a> - **date**</h6>
+                                <p class="">placeholder content in a paragraph.</p>
+                                <hr>
+                            </div>
+                        </div>
+                    </li>
+                    <hr>
+                </ul>
+            </div>
+        </div>>
+    </div>
+
+    <footer>
+        <div class="jumbotron row justify-content-between no-gutters"
+            style="padding: 1em; margin-bottom:0; margin-top: 40px;">
+            <div class="col-sm-3">
+                <h6>Images downloaded</h6>
+                <a href="https://vectorified.com/board-game-icon">Board Game Icon Image</a>
+            </div>
+            <div class="col-sm-3 col align-self-end">
+                created by <a href="https://github.com/Alberter-Laura">Laura Alberter (2021)</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}" defer></script>
+</body>
+
+</html>

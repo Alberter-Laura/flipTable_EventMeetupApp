@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>flipTABLE</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body class="container bg-light p-2">
+
+    <!-- NAVBAR -->
+    <!-- style="background-color: #e3f2fd;"? -->
+    <nav class="row navbar bg-dark navbar-dark ">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'imgs/board.png' %}" alt="game logo" style="width:55px;">
+            <b>flipTABLE</b>
+        </a>
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/dashboard">Home</a>
+                <a class="dropdown-item" href="/profile/{{user.id}}">View/Update Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">GameShelf</a>
+                <a class="dropdown-item" href="#">Add a Game to Shelf</a>
+                <a class="dropdown-item" href="#">Find a Group</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADING -->
+    <div class="jumbotron row shadow-lg">
+        <div class="col-auto mr-auto">
+            <h1 class='display-3'>Create an Event</h1>
+            <h6 class="text-muted">{{user.name}}, create an event so others can join!</h6>
+        </div>
+    </div>
+
+    <!-- MIDDLE -->
+    <div class="row justify-content-center container-fluid card border-info">
+        <div class="card-body">
+            <div class="row col-12 mb-3 justify-content-center card-header text-info">
+                <h5><b>ENTER INFORMATION FOR YOUR EVENT</b></h5>
+            </div>
+            <div class="col-12-sm-8 justify-content-center errors">
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li class="messages">{{ message}}</li>
+                    {% endfor %}
+                {% endif %}
+                </ul>
+            </div>
+            <div class="row col-12 justify-content-center">
+                <form class="col-8 justify-content-center" action="/add_event" method="POST">
+                    {%csrf_token%}
+                    <div class="row mb-4 mt-4 justify-content-start align-items-end">
+                        <label for="title" class="col-sm-2 form-label">Title</label>
+                        <input type="text" class="col-sm-10 form-control" name="title" required>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="row align-items-end col-sm-6">
+                            <label for="event_date" class="col-sm-5 form-label">Event Date</label>
+                            <input type="date" class="col-sm-7 form-control" name="event_date" required>
+                        </div>
+                        <div class="row align-items-end col-sm-6">
+                            <label for="time" class="col-sm-4 form-label">Start Time</label>
+                            <input type="time" class="col-sm-8 form-control" name="time" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="row align-items-end col-sm-6">
+                            <label for="address" class="col-sm-5 form-label">Address</label>
+                            <input type="text" class="col-sm-7 form-control" name="address" required>
+                        </div>
+                        <div class="row align-items-end col-sm-6">
+                            <label for="city" class="col-sm-4 form-label">City</label>
+                            <input type="text" class="col-sm-8 form-control" name="city" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4 justify-content-start align-items-baseline">
+                        <label for="details" class="col-sm-2 form-label">Details</label>
+                        <textarea rows="5" cols="35" wrap="soft" class="col-sm-10 form-control"
+                            name="details"></textarea>
+                    </div>
+                    <div class="row mb-4 justify-content-around">
+                        <div class="btn-group col-4 mb-3">
+                            <button type="submit" class="font-weight-bold btn btn-lg btn-info">Create</button>
+                        </div>
+                </form>
+                <div class="btn-group col-4 mb-3">
+                    <a href="/dashboard" type="button"
+                        class="font-weight-bold btn btn-lg btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>flipTABLE</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body class="container bg-light p-2">
+
+<!-- NAVBAR -->
+    <!-- style="background-color: #e3f2fd;"? -->
+    <nav class="row navbar bg-dark navbar-dark ">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'imgs/board.png' %}" alt="game logo" style="width:55px;">
+            <b>flipTABLE</b>
+        </a>
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/dashboard">Home</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Plan an Event</a>
+                <a class="dropdown-item" href="#">GameShelf</a>
+                <a class="dropdown-item" href="#">Add a Game to Shelf</a>
+                <a class="dropdown-item" href="#">Find a Group</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+<!-- HEADING -->
+    <div class="jumbotron row shadow-lg">
+        <div class="col-auto mr-auto">
+            <h1 class= 'display-3'>{{user.name}}</h1>
+            <p>Member Since: <span class="text-muted">{{user.created_at|date}}</span></p>
+            <p>Player Type: <span class="text-info"><b>{{user.player_type}}</b></span></p>
+        </div>
+        <div class="col-auto align-self-end">
+            <div class="btn-group ">
+                <a href="/plan_event" type="button" class="font-weight-bold btn btn-lg btn-info">Create an Event</a>
+            </div>
+            <div class="btn-group">
+                <a href="#" type="button" class="font-weight-bold btn btn-lg btn-info">Join a Group</a>
+            </div>
+        </div>
+    </div>
+
+<!-- MIDDLE -->
+    <div class="main row justify-content-evenly">
+        <!-- YOUR EVENTS -->
+        <div class="col-sm-6">
+            <div style="margin: 0em 1em 1em;">
+                <h5>EVENTS YOU ARE ATTENDING</h5>
+                <small class="text-muted">Click on event for more info</small>
+                <hr>
+            </div>
+            <ul class="list-unstyled scroll-bar" style="height: 600px;">
+                {% for event in all_users_events %}
+                    
+                <li class="media">
+                    <img class="ml-3 mt-3 rounded-circle img-fluid event-img-placeholder"
+                        src="{% static 'imgs/swords.png' %}" alt="Sword placeholder image">
+                    <a href="/event/{{event.id}}" class="dash-event-link">
+                        <div class="media-body dash-event-link">
+                            <h5 class="text-info mt-0 mb-1">{{event.title}}</h5>
+                            <p class="text-dark">{{event.event_date}} | {{event.time}}</p>
+                            <p class="text-dark">{{event.address}}, {{event.city}}</p>
+                        <div>
+                    </a>
+                    <span class="badge badge-pill badge-secondary" style="margin: 1em;">Attendees
+                        {{event.attending.count}}</span>
+                    {% if event.user_creater.id == user.id %}
+                    <a href="/event/{{event.id}}"><small class="text-dark"><span class="text-info">MY EVENT: </span>Edit Event</small></a>
+                    {%else%}
+                    <small class="text-dark">Created by <a href="#" class="text-info">{{event.user_creater.name}}</a></small>
+                    {% endif %}
+                </li>
+                <hr>
+                {% endfor %}
+            </ul>
+        </div>
+
+    <!-- ABOUT YOU/UPDATE -->
+        <div class="col-sm-6">
+            <div class="card border-info mb-3" style="max-width: 18rem;">
+                <div class="card-header text-info"><b>UPDATE YOUR PROFILE</b></div>
+                <div class="card-body">
+                    <div id="errors">
+                        {% if messages %}
+                        <ul>    
+                            {% for message in messages %}    
+                                <li class="messages">{{message}}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    <form action="/update_user/{{user.id}}" method="POST">
+                    {% csrf_token %}
+                        <label for="name" class="form-label">Name/Alias</label>
+                            <input type="text" class="form-control" name="name" value="{{user.name}}">
+                        <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" value="{{user.email}}">
+                        <label for="player_type">Player Type</label>
+                            <select class="form-control" name="type_dropdown">
+                                <option value="{{user.player_type}}">{{user.player_type}}</option>
+                                {% for type,type_choices in type_choices %}
+                                <option value="{{type}}">{{type_choices}}</option>
+                                {% endfor %}
+                            </select>
+                        <button type="submit" class="btn btn-info btn-block">Update</button>
+                    </form>
+                </div>
+            </div>
+            <!-- ABOUT ME -->
+            <div class="card border-info mb-3 " style="width: 18rem; height: 400px;">
+                <div class="card-header text-info"><b>ABOUT ME</b></div>
+                <div class="card-body">
+                    <form action="/update_user_about/{{user.id}}" id="about-me" method="POST">
+                    {% csrf_token %}
+                        <textarea class="form-control" name="about_me" rows="10" cols="35" wrap="soft" value={{user.about_me}}>{{user.about_me}}</textarea>
+                        <button type="submit" class="btn btn-info btn-block">Update</button>
+                    </form>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- MESSAGEBOARD -->
+    <div class="message-board row">
+        <div class="list-group col">
+            <div class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">MESSAGES</h5>
+                    <div>
+                        <a href="#" class="text-info font-weight-bold">New Messages</a>
+                        <span class="badge badge-pill badge-warning" style="margin: 1em;">*#*</span>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group scroll-bar" style="height: 200px;">
+
+                {% comment %}
+                <!-- {% for message in user-user_messages %}
+                    <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                    <a href="#">
+                        <h5 class="mb-1 text-info">{{message.user.name}} sent you</h5>
+                    </a>
+                        <small class="text-muted">{{message.updated_at|date}}</small>
+                    <div>
+                        <p class="mb-1">{{message.content}}</p>
+                        <a href="#"><small class="text-muted">Respond</small></a>
+                    </div>
+            {% endfor %} -->
+                {% endcomment %}
+                <div class="list-group-item list-group-item-action ">
+                    <div class="d-flex w-100 justify-content-between">
+                        <a href="#">
+                            <h5 class="mb-1 text-info">*user name* sent you</h5>
+                        </a>
+                        <small class="text-muted">*Date posted*</small>
+                    </div>
+                    <p class="mb-1">Some placeholder content in a paragraph.</p>
+                    <a href="#"><small class="text-muted">Respond</small></a>
+                </div>
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <a href="#">
+                            <h5 class="mb-1 text-info">*user name* sent you</h5>
+                        </a>
+                        <small class="text-muted">*Date posted*</small>
+                    </div>
+                    <p class="mb-1">Some placeholder content in a paragraph.</p>
+                    <a href="#"><small class="text-muted">Respond</small></a>
+                </div>
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <a href="#">
+                            <h5 class="mb-1 text-info">*user name* sent you</h5>
+                        </a>
+                        <small class="text-muted">*Date posted*</small>
+                    </div>
+                    <p class="mb-1">Some placeholder content in a paragraph.</p>
+                    <a href="#"><small class="text-muted">Respond</small></a>
+                </div>
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <a href="#">
+                            <h5 class="mb-1 text-info">*user name* sent you</h5>
+                        </a>
+                        <small class="text-muted">*Date posted*</small>
+                    </div>
+                    <p class="mb-1">Some placeholder content in a paragraph.</p>
+                    <a href="#"><small class="text-muted">Respond</small></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="jumbotron row justify-content-between no-gutters"
+            style="padding: 1em; margin-bottom:0; margin-top: 40px;">
+            <div class="col-sm-3">
+                <h6>Images downloaded</h6>
+                <a href="https://vectorified.com/board-game-icon">Board Game Icon Image</a>
+            </div>
+            <div class="col-sm-3 col align-self-end">
+                created by <a href="https://github.com/Alberter-Laura">Laura Alberter (2021)</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}" defer></script>
+</body>
+
+</html>

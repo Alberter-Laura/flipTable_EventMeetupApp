@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>flipTABLE</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body class="container bg-light p-2">
+
+    <!-- NAVBAR -->
+    <!-- style="background-color: #e3f2fd;"? -->
+    <nav class="row navbar bg-dark navbar-dark ">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'imgs/board.png' %}" alt="game logo" style="width:55px;">
+            <b>flipTABLE</b>
+        </a>
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/dashboard">Home</a>
+                <a class="dropdown-item" href="/profile/{{user.id}}">View/Update Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">GameShelf</a>
+                <a class="dropdown-item" href="#">Add a Game to Shelf</a>
+                <a class="dropdown-item" href="#">Find a Group</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADING -->
+    <div class="jumbotron row shadow-lg">
+        <div class="col-8 mr-auto ">
+            <h1 class='display-3 mb-4'>Your Upcoming Event</h1>
+        </div>
+        <div class="col-4 mt-5">
+            <a href="/delete_event/{{event.id}}" class="float-right font-weight-bold btn btn-lg btn-secondary">Cancel
+                Event</a>
+        </div>
+    </div>
+
+    <!-- MIDDLE -->
+
+    <div class="row justify-content-center container-fluid card border-info">
+        <div class="card-body">
+            <div class="row col-12 mb-3 justify-content-center card-header text-info">
+                <h5><b>EVENT INFORMATION</b></h5>
+            </div>
+            <form action="/edit_event/{{event.id}}" method="POST">
+                {%csrf_token%}
+                <div class="row justify-content-center">
+                    <div class="col-10 mb-3">
+                        <div class="row mb-4 align-items-end">
+                            <div class="col-12-sm-8 justify-content-center errors">
+                                {% if messages %}
+                                <ul>
+                                    {% for message in messages %}
+                                    <li class="messages">{{ message}}</li>
+                                    {% endfor %}
+                                {% endif %}
+                                </ul>
+                            </div>
+                            <div class="row align-items-end col-sm-12 mt-4">
+                                <label for="title" class="col-sm-2 form-label">Title:</label>
+                                <input type="text" class="col-sm-10 form-control" name="title" value="{{event.title}}">
+                            </div>
+                        </div>
+                        <div class="row mb-4 align-items-end">
+                            <div class="row align-items-end col-sm-6">
+                                <label for="event_date" class="col-sm-4">Event Date:</label>
+                                <input type="date" class="col-sm-7 form-control" name="event_date" value="{{event.event_date|date:'Y-m-d'}}">
+                            </div>
+                            <div class="row align-items-end col-sm-6">
+                                <label for="time" class="col-sm-4">Start Time:</label>
+                                <input type="time" class="col-sm-7 form-control" name="time" value="{{event.time|time:'H:i'}}">
+                            </div>
+                        </div>
+                        <div class="row mb-4 align-items-end">
+                            <div class="row align-items-end col-sm-12">
+                                <label for="address" class="col-sm-2 form-label">Address:</label>
+                                <input type="text" class="col-sm-6 form-control" name="address" value="{{event.address}}">
+                            </div>
+                            <div class="row align-items-end col-sm-12">
+                                <label for="city" class="col-sm-2 form-label">City</label>
+                                <input type="text" class="col-sm-3 form-control" name="city" value="{{event.city}}">
+                            </div>
+                        </div>
+                        <div class="row mb-4 justify-content-start align-items-baseline">
+                            <label for="details" class="col-sm-2 form-label">Details:</label>
+                            <textarea name="details" rows="5" cols="35" wrap="soft"
+                                class="col-sm-10 form-control">{{event.details}}</textarea>
+                        </div>
+                        <div class="row mb-4 justify-content-around">
+                            <div class="btn-group col-4 mb-3">
+                                <button type="submit" class="font-weight-bold btn btn-lg btn-info">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <div class="jumbotron row justify-content-between no-gutters"
+            style="padding: 1em; margin-bottom:0; margin-top: 40px;">
+            <div class="col-sm-3">
+                <h6></h6>
+
+            </div>
+            <div class="col-sm-3 col align-self-end">
+                created by <a href="https://github.com/Alberter-Laura">Laura Alberter (2021)</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

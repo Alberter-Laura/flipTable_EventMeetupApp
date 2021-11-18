@@ -1,0 +1,96 @@
+* {
+    /* margin: auto; */
+    /* padding: 5px; */
+    /* font-family: fantasy; */
+}
+
+.errors {
+    color: rgb(255, 123, 0);
+    font-weight: bold;
+    list-style-type: none;
+}
+
+
+.game-night {
+    height: 400px;
+    width: auto;
+    background: transparent;
+    vertical-align: middle; 
+}
+
+/* NAVBAR */
+.nav-item{
+    text-align: right;
+}
+.dropdown:hover>.dropdown-menu {
+    display: block;
+}
+.dropdown>.dropdown-toggle:active {
+    pointer-events: none;
+}
+.footer {
+    position: fixed;
+    margin-bottom: px0;
+    
+    width: 100%;
+}
+
+/* LOGIN PAGE */
+.login-card {
+    width: 18em;
+    height: 20em;
+    padding: 0px;
+}
+.card-img-login {
+    width: 13em;
+    height: 12em;
+    padding-top: 15px;
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px;
+}
+.reg-box{
+    margin-top: 15px;
+}
+.form-reg {
+    padding: 5px;
+}
+/* #header-login or bg{
+    background-repeat: no-repeat;
+    background-size: 1800px 900px;
+    background-attachment: fixed;
+} */
+
+/* DASHBOARD */
+.jumbotron{
+    padding: 40px 25px 20px 25px;
+}
+.main-page-btns {
+    padding-top: 50px;
+    padding-bottom: -30px;
+}
+
+.comment {
+    padding-left: 5px;
+    border-left-color: #5bc0de;
+    border-left-width: .25rem;
+    border-radius: .25rem;
+}
+
+.dash-event-link :hover {
+    text-decoration: none;
+    color: #17A2B8;
+} 
+
+
+.event-img-placeholder {
+    width: 90px;
+    padding: 10px;
+}
+.scroll-bar {
+    overflow-y: scroll;
+}
+
+/* EDIT PAGE */
+
+

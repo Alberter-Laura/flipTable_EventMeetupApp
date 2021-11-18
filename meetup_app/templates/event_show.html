@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>flipTABLE</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body class="container bg-light p-2">
+
+    <!-- NAVBAR -->
+    <!-- style="background-color: #e3f2fd;"? -->
+    <nav class="row navbar bg-dark navbar-dark ">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'imgs/board.png' %}" alt="game logo" style="width:55px;">
+            <b>flipTABLE</b>
+        </a>
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/dashboard">Home</a>
+                <a class="dropdown-item" href="/profile/{{user.id}}">View/Update Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">GameShelf</a>
+                <a class="dropdown-item" href="#">Add a Game to Shelf</a>
+                <a class="dropdown-item" href="#">Find a Group</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADING -->
+    <div class="jumbotron row shadow-lg">
+        <div class="col-auto mr-auto">
+            <h1 class='display-3'>Upcoming Event</h1>
+            <h6 class="text-muted">Click the attending button if you are joining!</h6>
+        </div>
+        <div class="col-6 mb-4">
+
+            {% if user in event.attending.all %}
+            <a href="/not_attending/{{user.id}}/{{event.id}}" class="float-right font-weight-bold btn btn-lg btn-secondary">I can't attend</a>
+
+            {% else %}
+            <a href="/attending/{{user.id}}/{{event.id}}" class="float-right font-weight-bold btn btn-lg btn-info">YES, I want to attend!</a>
+            {% endif%}
+        </div>
+    </div>
+
+    <!-- MIDDLE -->
+
+    <div class="row justify-content-center container-fluid card border-info">
+        <div class="card-body">
+            <div class="row col-12 mb-3 justify-content-center card-header text-info">
+                <h5><b>EVENT INFORMATION</b></h5>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-10 mb-3">
+                    <div class="row mb-4 align-items-end">
+                        <div class="row align-items-end col-sm-12 mt-4">
+                            <h5 class="col-sm-2">Title:</h5>
+                            <h5 class="col-sm-10">{{event.title}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mb-4 align-items-end">
+                        <div class="row align-items-end col-sm-6">
+                            <h5 class="col-sm-4">Event Date:</h5>
+                            <h5 class="col-sm-7">{{event.event_date}}</h5>
+                        </div>
+                        <div class="row align-items-end col-sm-6">
+                            <h5 class="col-sm-4">Start Time:</h5>
+                            <h5 class="col-sm-7">{{event.time}}</h5>
+                        </div> 
+                    </div>
+                    <div class="row mb-4 align-items-end">
+                        <div class="row align-items-end col-sm-12">
+                            <h5 class="col-sm-2">Address:</h5>
+                            <h5 class="col-sm-9">{{event.address}}, {{event.city}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mb-4 justify-content-start align-items-baseline">
+                        <h5 class="col-sm-2">Details:</h5>
+                        <h6 rows="5" cols="35" wrap="soft" class="col-sm-10">{{event.details}}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>
